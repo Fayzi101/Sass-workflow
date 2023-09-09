@@ -1,3 +1,70 @@
+//partial files
+@import "./resets";
+@import "./variables";
+
+//function to get the font weight through map with an arguments that 
+//recieves key for map
+@function weight($weight-name){
+    @return map-get($font-weights , $weight-name)
+};
+
+//for the same code that we might have to write multiple time we use mixin
+@mixin flexCenter($direction) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: $direction;
+}
+
+//conditional styling can also be added using mixins
+@mixin theme($light-theme:true){
+    @if $light-theme{
+        background: lighten($primary-color, 100%);
+        color: darken($text-color, 100%);
+    }
+
+}
+
+@mixin mobile {
+    @media (max-width: $mobile) {
+        @content;
+    }
+}
+
 body {
-    background: blue
+    background: $primary-color;
+    color: $text-color;
+}
+
+.main{
+  @include flexCenter(row);
+    width: 80%;
+    margin: 0 auto;
+
+    //ampersand with interpolation
+    #{&}__paragraph {
+        //font-weight: map-get($font-weights , bold );     simple mapping
+        
+        //functional mapping
+        font-weight: weight(bold);
+    
+    //ampersand    
+    &:hover {
+        color: pink;
+    }
+
+    }
+
+    @include mobile{
+        flex-direction: column;
+        
+        #{&}__paragraph {
+        margin-top: 2em;
+    }
+    }
+}
+
+
+.light{
+    @include theme(false)
 }
